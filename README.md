@@ -11,6 +11,31 @@ This system acts as a counterpart to the [Market Neutral Requester](https://gith
   <img src="https://github.com/user-attachments/assets/9b29a7bc-5b89-4c67-9336-2249f0569d00" alt="MarketNeutral (10)" width="500">
 </p>
 
+## Installing pip
+
+Before you can install the required libraries for this project, you need to have pip installed. Pip is the package installer for Python and is used to install and manage software packages.
+
+### Windows
+
+1. Download the get-pip.py file from https://bootstrap.pypa.io/get-pip.py.
+2. Open a command prompt and navigate to the directory where you downloaded get-pip.py.
+3. Run the following command:
+   ```shell
+   python get-pip.py
+   ```
+
+### macOS and Linux
+
+Pip is usually installed by default with Python. You can check if pip is installed by running:
+```shell
+pip --version
+```
+
+If pip is not installed, you can install it using the following command:
+```shell
+python3 -m ensurepip --upgrade
+```
+
 ## Installation
 
 1. **Clone the repository**
