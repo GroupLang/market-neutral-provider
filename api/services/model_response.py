@@ -4,7 +4,7 @@ import sys
 
 from loguru import logger
 
-from api import OPENAI_API_KEY
+from api import OPENAI_API_KEY, summarization_prompt
 from api.objects.openai_wrapper import OpenAIWrapper
 
 
@@ -12,10 +12,16 @@ def model_response(model_args: dict):
     logger.info(f"Initializing model")
     openai = OpenAIWrapper(OPENAI_API_KEY)
 
-    logger.info(f"Creating completion")
-    response = openai.create_completion(model_args["messages"])
+    logger.info(f"Agent 1: Summarizing news")
+    summary_response = openai.summarize_news(model_args["messages"], summarization_prompt)
+    summary = summary_response.choices[0].message.content
+    logger.info(f"News summary: {summary}")
 
-    logger.info(f"Response: {response}")
+    logger.info(f"Agent 2: Making investment decision based on summary")
+    decision_messages = [{"role": "user", "content": summary}]
+    response = openai.create_completion(decision_messages)
+
+    logger.info(f"Final decision: {response}")
 
     return response
 

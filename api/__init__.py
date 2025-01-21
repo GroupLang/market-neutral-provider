@@ -17,3 +17,5 @@ Provide a concise and clear explanation of the logic behind the suggested trade 
 where action can be one and only one of BUY, HOLD or SELL."""  # noqa E501
 model_name = "gpt-3.5-turbo"
 temperature = 0.9
+
+summarization_prompt = "Please summarize the following news articles in a concise manner."

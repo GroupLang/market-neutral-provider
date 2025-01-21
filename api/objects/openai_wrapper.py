@@ -1,33 +1,13 @@
-import openai
-from fastapi import HTTPException, status
-from loguru import logger
-from openai.error import ServiceUnavailableError
-
 from api import baseline_system_prompt_tpl, model_name, temperature
-
+from .agents import NewsAgent, DecisionAgent
 
 class OpenAIWrapper:
     def __init__(self, api_key):
-        self.api_key = api_key
-        openai.api_key = self.api_key
+        self.news_agent = NewsAgent(api_key, model_name, temperature)
+        self.decision_agent = DecisionAgent(api_key, model_name, temperature, baseline_system_prompt_tpl)
 
     def create_completion(self, messages):
-        messages = self._add_system_message(messages)
-        try:
-            return openai.ChatCompletion.create(
-                model=model_name, messages=messages, temperature=temperature
-            )
-        except ServiceUnavailableError as e:
-            logger.error(e)
-            raise HTTPException(
-                status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="OpenAI service unavailable"
-            )
-        except Exception as e:
-            logger.error(e)
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error"
-            )
+        return self.decision_agent.make_decision(messages[0]['content'])
 
-    def _add_system_message(self, conversation):
-        conversation.insert(0, {"role": "system", "content": baseline_system_prompt_tpl})
-        return conversation
+    def summarize_news(self, messages, system_prompt):
+        return self.news_agent.summarize_news(messages, system_prompt)
